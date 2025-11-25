@@ -2,9 +2,11 @@
   if ENV["MIGRATE"].present?
     mysql_app_user_key = "MYSQL_ALTER_USER"
     mysql_app_password_key = "MYSQL_ALTER_PASSWORD"
+    max_execution_time_ms = 0 # No limit
   else
     mysql_app_user_key = "MYSQL_APP_USER"
     mysql_app_password_key = "MYSQL_APP_PASSWORD"
+    max_execution_time_ms = 5_000
   end
 
   mysql_app_user = ENV[mysql_app_user_key]
@@ -19,6 +21,7 @@ default: &default
   timeout: 5000
   variables:
     transaction_isolation: READ-COMMITTED
+    max_execution_time: <%= max_execution_time_ms %>
 
 development:
   primary:
