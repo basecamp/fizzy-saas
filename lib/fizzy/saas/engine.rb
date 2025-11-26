@@ -24,6 +24,16 @@ module Fizzy
         end
       end
 
+      initializer "fizzy_saas.logging.queenbee_id" do |app|
+        ActiveSupport.on_load(:action_controller_base) do
+          before_action do
+            if Current.account.present?
+              logger.try(:struct, account: { queenbee_id: Current.account.external_account_id })
+            end
+          end
+        end
+      end
+
       config.to_prepare do
         Queenbee::Subscription.short_names = Subscription::SHORT_NAMES
         Queenbee::ApiToken.token = Rails.application.credentials.dig(:queenbee_api_token)
