@@ -15,7 +15,6 @@ module Fizzy
 
         def handle_account_creation_error(error)
           @queenbee_account&.cancel
-          @queenbee_account = nil
         end
 
         def queenbee_account_attributes
