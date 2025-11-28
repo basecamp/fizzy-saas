@@ -18,6 +18,42 @@ module Fizzy
         app.config.middleware.insert_after(ActiveRecord::Middleware::DatabaseSelector, TransactionPinning::Middleware)
       end
 
+      initializer "fizzy_saas.sentry" do
+        if !Rails.env.local? && ENV["SKIP_TELEMETRY"].blank?
+          Sentry.init do |config|
+            config.dsn = ENV["SENTRY_DSN"]
+            config.breadcrumbs_logger = %i[ active_support_logger http_logger ]
+            config.send_default_pii = false
+            config.release = ENV["GIT_REVISION"]
+            config.excluded_exceptions += [ "ActiveRecord::ConcurrentMigrationError" ]
+          end
+        end
+      end
+
+      initializer "fizzy_saas.yabeda" do
+        require "prometheus/client/support/puma"
+
+        Prometheus::Client.configuration.logger = Rails.logger
+        Prometheus::Client.configuration.pid_provider = Prometheus::Client::Support::Puma.method(:worker_pid_provider)
+        Yabeda::Rails.config.controller_name_case = :camel
+
+        Yabeda::ActiveJob.install!
+
+        require "yabeda/solid_queue"
+        Yabeda::SolidQueue.install!
+
+        Yabeda::ActionCable.configure do |config|
+          config.channel_class_name = "ActionCable::Channel::Base"
+        end
+      end
+
+      initializer "fizzy_saas.solid_queue" do
+        SolidQueue.on_start do
+          Process.warmup
+          Yabeda::Prometheus::Exporter.start_metrics_server!
+        end
+      end
+
       initializer "fizzy_saas.production_config", before: :load_config_initializers do |app|
         if Rails.env.local?
           if Rails.root.join("tmp/structured-logging.txt").exist?
