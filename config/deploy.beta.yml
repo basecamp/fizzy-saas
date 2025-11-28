@@ -1,13 +1,13 @@
 servers:
   web:
     hosts:
-      - fizzy-beta-app-01.sc-chi-int.37signals.com
-      - fizzy-beta-app-101.df-iad-int.37signals.com
+      - fizzy-beta-app-01.sc-chi-int.37signals.com: sc_chi
+      - fizzy-beta-app-101.df-iad-int.37signals.com: df_iad
     labels:
       otel_scrape_enabled: true
   jobs:
     hosts:
-      - fizzy-beta-app-01.sc-chi-int.37signals.com
+      - fizzy-beta-app-01.sc-chi-int.37signals.com: sc_chi
     labels:
       otel_scrape_enabled: true
 
@@ -41,6 +41,10 @@ env:
     - QUEENBEE_API_TOKEN
     - SIGNAL_ID_SECRET
     - SENTRY_DSN
+  tags:
+    sc_chi: {}
+    df_iad:
+      PRIMARY_DATACENTER: true
 
 accessories:
   load-balancer:
