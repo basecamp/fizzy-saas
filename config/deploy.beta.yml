@@ -5,11 +5,9 @@ servers:
       - fizzy-beta-app-101.df-iad-int.37signals.com: df_iad
     labels:
       otel_scrape_enabled: true
-  jobs:
-    hosts:
-      - fizzy-beta-app-01.sc-chi-int.37signals.com: sc_chi
-    labels:
-      otel_scrape_enabled: true
+
+# we don't run the jobs role in beta
+allow_empty_roles: true
 
 proxy:
   ssl: false
