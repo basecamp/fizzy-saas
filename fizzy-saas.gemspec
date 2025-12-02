@@ -5,20 +5,20 @@ Gem::Specification.new do |spec|
   spec.version     = Fizzy::Saas::VERSION
   spec.authors     = [ "Mike Dalessio" ]
   spec.email       = [ "mike@37signals.com" ]
-  spec.homepage    = "TODO"
-  spec.summary     = "TODO: Summary of Fizzy::Saas."
-  spec.description = "TODO: Description of Fizzy::Saas."
+  spec.homepage    = "https://github.com/basecamp/fizzy-saas"
+  spec.summary     = "37signals SaaS companion for Fizzy"
+  spec.description = "Rails engine that bundles with Fizzy to offer the hosted version at https://app.fizzy.do"
+  spec.license     = "O'Saasy"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the "allowed_push_host"
   # to allow pushing to a single host or delete this section to allow pushing to any host.
-  spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
+  spec.metadata["allowed_push_host"] = "https://rubygems.org"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
-  spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
+  spec.metadata["source_code_uri"] = "https://github.com/basecamp/fizzy-saas"
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
-    Dir["{app,config,db,lib,test}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
+    Dir["{app,config,db,lib,test}/**/*", "LICENSE.md", "Rakefile", "README.md"]
   end
 
   spec.add_dependency "rails", ">= 8.1.0.beta1"
