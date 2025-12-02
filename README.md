@@ -8,7 +8,7 @@ To make Fizzy run in SaaS mode, run this in the terminal:
 bin/rails saas:enable
 ```
 
-To can go back to open source mode:
+To go back to open source mode:
 
 ```ruby
 bin/rails saas:disable
