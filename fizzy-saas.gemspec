@@ -35,4 +35,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "yabeda-puma-plugin"
   spec.add_dependency "yabeda-rails", ">= 0.10"
   spec.add_dependency "prometheus-client-mmap"
+  spec.add_dependency "oauth2", "~> 2.0"
 end
