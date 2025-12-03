@@ -85,7 +85,7 @@ module Fizzy
         Queenbee::Subscription.short_names = Subscription::SHORT_NAMES
 
         # Default to local dev QB token if not set
-        Queenbee::ApiToken.token = ENV.fetch("QUEENBEE_API_TOKEN") { "69a4cfb8705913e6323f7b4c0c0cff9bd8df37da532f4375b85e9655b8100bb023591b48d308205092aa0a04dd28cb6c62d6798364a6f44cc1e675814eb148a1" }
+        Queenbee::ApiToken.token = ENV.fetch("QUEENBEE_API_TOKEN") { "69a4cfb8705913e6323f7b4c0c0cff9bd8df37da532f4375b85e9655b8100bb023591b48d308205092aa0a04dd28cb6c62d6798364a6f44cc1e675814eb148a1" } # gitleaks:allow development-only token
 
         Subscription::SHORT_NAMES.each do |short_name|
           const_name = "#{short_name}Subscription"
