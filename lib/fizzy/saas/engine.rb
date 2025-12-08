@@ -54,6 +54,9 @@ module Fizzy
             config.send_default_pii = false
             config.release = ENV["KAMAL_VERSION"]
             config.excluded_exceptions += [ "ActiveRecord::ConcurrentMigrationError" ]
+
+            # Receive Rails.error.report and retry_on/discard_on report: true
+            config.rails.register_error_subscriber = true
           end
         end
       end
