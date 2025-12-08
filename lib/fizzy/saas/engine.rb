@@ -52,8 +52,11 @@ module Fizzy
             config.dsn = ENV["SENTRY_DSN"]
             config.breadcrumbs_logger = %i[ active_support_logger http_logger ]
             config.send_default_pii = false
-            config.release = ENV["GIT_REVISION"]
+            config.release = ENV["KAMAL_VERSION"]
             config.excluded_exceptions += [ "ActiveRecord::ConcurrentMigrationError" ]
+
+            # Receive Rails.error.report and retry_on/discard_on report: true
+            config.rails.register_error_subscriber = true
           end
         end
       end
