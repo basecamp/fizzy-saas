@@ -1,0 +1,5 @@
+<% if Current.account.nearing_plan_cards_limit? %>
+  <div class="settings_subscription__warning full-width pad-inline center margin-block-half">
+    You've used <%= Current.account.cards_count %> out of <%= Plan.free.card_limit %> free cards. <strong><%= link_to "Upgrade to unlimitted", account_settings_path(anchor: "subscription") %></strong>.
+  </div>
+<% end %>

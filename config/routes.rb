@@ -3,5 +3,8 @@ Fizzy::Saas::Engine.routes.draw do
 
   namespace :admin do
     mount Audits1984::Engine, at: "/console"
+    get "stats", to: "stats#show"
+    resource :account_search, only: :create
+    resources :accounts
   end
 end

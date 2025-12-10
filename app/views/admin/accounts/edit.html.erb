@@ -1,0 +1,14 @@
+<h1>Edit Account <%= @account.external_account_id %></h1>
+
+<p><strong>Name:</strong> <%= @account.name %></p>
+
+<%= form_with model: @account, url: saas.admin_account_path(@account.external_account_id) do |form| %>
+  <p>
+    <%= form.label :cards_count %>
+    <%= form.number_field :cards_count %>
+  </p>
+
+  <%= form.submit "Update" %>
+<% end %>
+
+<p><%= link_to "Back", saas.admin_accounts_path %></p>
