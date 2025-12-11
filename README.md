@@ -50,7 +50,7 @@ Beta tenant is:
 
 Staging is primarily intended for testing infrastructure changes. It uses production-like but separate database and Active Storage configurations.
 
-- https://fizzy.37signals-staging.com/
+- https://app.fizzy-staging.com/
 
 ## License
 
