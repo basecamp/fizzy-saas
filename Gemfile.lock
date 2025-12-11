@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/basecamp/queenbee-plugin
-  revision: eb01c697de1ad028afc65cc7d9b5345a7a8e849f
-  ref: eb01c697de1ad028afc65cc7d9b5345a7a8e849f
+  revision: 14312a940471e20617b38cdec7c092a01567d18b
+  ref: 14312a940471e20617b38cdec7c092a01567d18b
   specs:
     queenbee (3.2.0)
       activeresource
