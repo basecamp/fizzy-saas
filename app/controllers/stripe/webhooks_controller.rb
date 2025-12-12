@@ -15,14 +15,10 @@ class Stripe::WebhooksController < ApplicationController
   private
     def dispatch_stripe_event(event)
       case event.type
-        when "checkout.session.completed"
-          handle_checkout_completed(event.data.object)
-        when "customer.subscription.updated"
-          handle_subscription_updated(event.data.object)
-        when "customer.subscription.deleted"
-          handle_subscription_deleted(event.data.object)
-        when "invoice.payment_failed"
-          handle_payment_failed(event.data.object)
+      when "checkout.session.completed"
+        sync_new_subscription(event.data.object.subscription, plan_key: event.data.object.metadata["plan_key"]) if event.data.object.mode == "subscription"
+      when "customer.subscription.updated", "customer.subscription.deleted"
+        sync_subscription(event.data.object.id)
       end
     end
 
@@ -36,39 +32,29 @@ class Stripe::WebhooksController < ApplicationController
       nil
     end
 
-    def handle_checkout_completed(session)
-      return unless session.mode == "subscription"
-
-      subscription = find_subscription_by_customer(session.customer)
-      return unless subscription
-
-      stripe_subscription = Stripe::Subscription.retrieve(session.subscription)
-
-      subscription.update! \
-        stripe_subscription_id: stripe_subscription.id,
-        plan_key: session.metadata["plan_key"],
-        status: stripe_subscription.status,
-        current_period_end: extract_current_period_end(stripe_subscription)
+    def sync_new_subscription(stripe_subscription_id, plan_key:)
+      sync_subscription(stripe_subscription_id) do |subscription_properties|
+        subscription_properties[:plan_key] = plan_key if plan_key
+      end
     end
 
-    def handle_subscription_updated(stripe_subscription)
+    # Always fetch fresh subscription data from Stripe to handle out-of-order
+    # event delivery. Not relying on payload data.
+    def sync_subscription(stripe_subscription_id)
+      stripe_subscription = Stripe::Subscription.retrieve(stripe_subscription_id)
+
       if subscription = find_subscription_by_customer(stripe_subscription.customer)
-        subscription.update! \
+        subscription_properties = {
+          stripe_subscription_id: stripe_subscription.id,
           status: stripe_subscription.status,
-          current_period_end: extract_current_period_end(stripe_subscription),
+          current_period_end: current_period_end_for(stripe_subscription),
           cancel_at: stripe_subscription.cancel_at ? Time.at(stripe_subscription.cancel_at) : nil
-      end
-    end
+        }
 
-    def handle_subscription_deleted(stripe_subscription)
-      if subscription = find_subscription_by_customer(stripe_subscription.customer)
-        subscription.update!(status: "canceled", stripe_subscription_id: nil)
-      end
-    end
+        yield subscription_properties if block_given?
+        subscription_properties[:stripe_subscription_id] = nil if stripe_subscription.status == "canceled"
 
-    def handle_payment_failed(invoice)
-      if subscription = find_subscription_by_customer(invoice.customer)
-        subscription.update!(status: "past_due")
+        subscription.update!(subscription_properties)
       end
     end
 
@@ -76,7 +62,7 @@ class Stripe::WebhooksController < ApplicationController
       Account::Subscription.find_by(stripe_customer_id: customer_id)
     end
 
-    def extract_current_period_end(stripe_subscription)
+    def current_period_end_for(stripe_subscription)
       timestamp = stripe_subscription.items.data.first&.current_period_end
       Time.at(timestamp) if timestamp
     end
