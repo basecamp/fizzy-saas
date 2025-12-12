@@ -1,5 +1,6 @@
 require_relative "transaction_pinning"
 require_relative "signup"
+require_relative "authorization"
 require_relative "../../rails_ext/active_record_tasks_database_tasks.rb"
 
 module Fizzy
@@ -140,6 +141,9 @@ module Fizzy
           ::Object.send(:remove_const, const_name) if ::Object.const_defined?(const_name)
           ::Object.const_set const_name, Subscription.const_get(short_name, false)
         end
+
+        ::Authorization.include Fizzy::Saas::Authorization::Controller
+        ::Identity.include Fizzy::Saas::Authorization::Identity
       end
     end
   end
