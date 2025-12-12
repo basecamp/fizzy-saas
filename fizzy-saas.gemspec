@@ -18,8 +18,11 @@ Gem::Specification.new do |spec|
   spec.metadata["source_code_uri"] = "https://github.com/basecamp/fizzy-saas"
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
-    Dir["{app,config,db,lib}/**/*", "test/fixtures/**/*", "LICENSE.md", "Rakefile", "README.md"]
+    Dir["{app,config,db,lib,exe}/**/*", "test/fixtures/**/*", "LICENSE.md", "Rakefile", "README.md"]
   end
+
+  spec.bindir = "exe"
+  spec.executables = [ "stripe-dev" ]
 
   spec.add_dependency "rails", ">= 8.1.0.beta1"
   spec.add_dependency "queenbee"
