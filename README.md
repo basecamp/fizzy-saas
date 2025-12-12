@@ -40,6 +40,12 @@ bin/dev # You need to start the dev server in the same terminal session
 
 This will ask for your 1password authorization to read and set the environment variables that Stripe needs.
 
+### Stripe environments
+
+* [Development](https://dashboard.stripe.com/acct_1SdTFtRus34tgjsJ/test/dashboard)
+* [Staging](https://dashboard.stripe.com/acct_1SdTbuRvb8txnPBR/test/dashboard)
+* [Production](https://dashboard.stripe.com/acct_1SNy97RwChFE4it8/dashboard)
+
 ## Environments
 
 Fizzy is deployed with [Kamal](https://kamal-deploy.org/). You'll need to have the 1Password CLI set up in order to access the secrets that are used when deploying. Provided you have that, it should be as simple as `bin/kamal deploy` to the correct environment.
