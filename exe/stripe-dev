@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+#
+# Fetches Stripe development environment variables from 1Password.
+# Usage: eval "$(bundle exec stripe-dev)"
+
+require "json"
+
+secrets_escaped = `kamal secrets fetch \
+  --adapter 1password \
+  --account basecamp \
+  --from "Deploy/Fizzy" \
+  "Development/STRIPE_SECRET_KEY" \
+  "Development/STRIPE_MONTHLY_V1_PRICE_ID" 2>/dev/null`
+
+# kamal outputs shell-escaped JSON, unescape it
+secrets_json = secrets_escaped.gsub(/\\(.)/, '\1')
+secrets = JSON.parse(secrets_json)
+
+stripe_secret_key = secrets["Deploy/Fizzy/Development/STRIPE_SECRET_KEY"]
+stripe_price_id = secrets["Deploy/Fizzy/Development/STRIPE_MONTHLY_V1_PRICE_ID"]
+
+puts %Q(export STRIPE_SECRET_KEY="#{stripe_secret_key}")
+puts %Q(export STRIPE_MONTHLY_V1_PRICE_ID="#{stripe_price_id}")
