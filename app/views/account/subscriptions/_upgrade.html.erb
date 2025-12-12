@@ -5,6 +5,8 @@
       <span>Upgrade to Unlimited</span>
     <% end %>
   <% else %>
-    <strong>This account has used <u><%= Plan.free.card_limit %></u> free cards. Upgrade to get more.</strong>
+    <div class="pad-inline pad-block-half">
+      <strong>This account has used <u><%= Plan.free.card_limit %></u> free cards. Upgrade to get more.</strong>
+    </div>
   <% end %>
 </div>
