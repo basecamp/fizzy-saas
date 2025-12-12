@@ -1,7 +1,7 @@
 class Plan
   PLANS = {
     free_v1: { name: "Free", price: 0, card_limit: 1000, storage_limit: 1.gigabytes },
-    monthly_v1: { name: "Unlimitted", price: 20, card_limit: Float::INFINITY, storage_limit: 5.gigabytes, stripe_price_id: ENV["STRIPE_MONTHLY_V1_PRICE_ID"] }
+    monthly_v1: { name: "Unlimited", price: 20, card_limit: Float::INFINITY, storage_limit: 5.gigabytes, stripe_price_id: ENV["STRIPE_MONTHLY_V1_PRICE_ID"] }
   }
 
   attr_reader :key, :name, :price, :card_limit, :storage_limit, :stripe_price_id
