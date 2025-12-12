@@ -24,6 +24,22 @@ After making changes to this gem, you need to update Fizzy to pick up the change
 BUNDLE_GEMFILE=Gemfile.saas bundle update --conservative fizzy-saas
 ```
 
+## Working with Stripe
+
+The first time, you need to:
+
+1. Install Stripe CLI: https://stripe.com/docs/stripe-cli
+2. Run `stripe login` and authorize the environment `37signals Development`
+
+Then, for working on the Stripe integration locally, you need to run this script to start the tunneling and set the environment variables:
+
+```sh
+eval "$(BUNDLE_GEMFILE=Gemfile.saas bundle exec stripe-dev)"
+bin/dev # You need to start the dev server in the same terminal session
+```
+
+This will ask for your 1password authorization to read and set the environment variables that Stripe needs.
+
 ## Environments
 
 Fizzy is deployed with [Kamal](https://kamal-deploy.org/). You'll need to have the 1Password CLI set up in order to access the secrets that are used when deploying. Provided you have that, it should be as simple as `bin/kamal deploy` to the correct environment.
