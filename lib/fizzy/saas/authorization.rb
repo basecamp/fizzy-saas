@@ -17,7 +17,7 @@ module Fizzy
       module Identity
         extend ActiveSupport::Concern
 
-        EMPLOYEE_DOMAINS = ["@37signals.com", "@basecamp.com"].freeze
+        EMPLOYEE_DOMAINS = [ "@37signals.com", "@basecamp.com" ].freeze
 
         def employee?
           email_address.end_with?(*EMPLOYEE_DOMAINS)

@@ -142,7 +142,7 @@ module Fizzy
           ::Object.const_set const_name, Subscription.const_get(short_name, false)
         end
 
-        ::Authorization.include Fizzy::Saas::Authorization::Controller
+        ::ApplicationController.include Fizzy::Saas::Authorization::Controller
         ::Identity.include Fizzy::Saas::Authorization::Identity
       end
     end
