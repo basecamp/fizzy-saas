@@ -1,3 +1,5 @@
+retain_containers: 1
+
 servers:
   web:
     hosts:
