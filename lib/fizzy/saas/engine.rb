@@ -9,6 +9,28 @@ module Fizzy
       # moved from config/initializers/queenbee.rb
       Queenbee.host_app = Fizzy
 
+      initializer "fizzy_saas.content_security_policy", before: :load_config_initializers do |app|
+        app.config.x.content_security_policy.form_action = "https://checkout.stripe.com"
+      end
+
+      initializer "fizzy_saas.assets" do |app|
+        app.config.assets.paths << root.join("app/assets/stylesheets")
+      end
+
+      initializer "fizzy.saas.routes", after: :add_routing_paths do |app|
+        # Routes that rely on the implicit account tenant should go here instead of in +routes.rb+.
+        app.routes.prepend do
+          namespace :account do
+            resource :billing_portal, only: :show
+            resource :subscription
+          end
+
+          namespace :stripe do
+            resource :webhooks, only: :create
+          end
+        end
+      end
+
       initializer "fizzy.saas.mount" do |app|
         app.routes.append do
           mount Fizzy::Saas::Engine => "/", as: "saas"
@@ -45,6 +67,10 @@ module Fizzy
         if Rails.env.test?
           require_relative "testing"
         end
+      end
+
+      initializer "fizzy_saas.stripe" do
+        Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
       end
 
       initializer "fizzy_saas.sentry" do
@@ -101,6 +127,8 @@ module Fizzy
       end
 
       config.to_prepare do
+        ::Account.include(Account::Billing)
+        ::CardsController.include(Card::Limited)
         ::Signup.prepend(Fizzy::Saas::Signup)
 
         Queenbee::Subscription.short_names = Subscription::SHORT_NAMES
