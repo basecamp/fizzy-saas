@@ -16,7 +16,7 @@ class Account::SubscriptionsController < ApplicationController
       automatic_tax: { enabled: true },
       tax_id_collection: { enabled: true },
       billing_address_collection: "required",
-      customer_update: { address: "auto" }
+      customer_update: { address: "auto", name: "auto" }
 
     redirect_to session.url, allow_other_host: true
   end
