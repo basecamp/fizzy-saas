@@ -7,6 +7,7 @@ Fizzy::Saas::Engine.routes.draw do
     resource :account_search, only: :create
     resources :accounts do
       resource :overridden_limits, only: :destroy
+      resource :billing_waiver, only: [ :create, :destroy ]
     end
   end
 end

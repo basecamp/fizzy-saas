@@ -48,4 +48,29 @@ class Account::LimitedTest < ActiveSupport::TestCase
     assert account.exceeding_card_limit?
     assert_equal 1001, account.billed_cards_count
   end
+
+  test "comped accounts are never limited" do
+    account = accounts(:initech)
+    account.update_column(:cards_count, 1_000_000)
+
+    assert account.exceeding_card_limit?
+    assert account.nearing_plan_cards_limit?
+
+    account.comp
+
+    assert_not account.exceeding_card_limit?
+    assert_not account.nearing_plan_cards_limit?
+  end
+
+  test "uncomping an account restores limits" do
+    account = accounts(:initech)
+    account.update_column(:cards_count, 1_000_000)
+    account.comp
+
+    assert_not account.exceeding_card_limit?
+
+    account.uncomp
+
+    assert account.exceeding_card_limit?
+  end
 end

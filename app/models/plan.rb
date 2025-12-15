@@ -12,11 +12,11 @@ class Plan
     end
 
     def free
-      @free ||= all.find(&:free?)
+      @free ||= find(:free_v1)
     end
 
     def paid
-      @paid ||= all.find(&:paid?)
+      @paid ||= find(:monthly_v1)
     end
 
     def find(key)

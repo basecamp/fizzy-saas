@@ -2,7 +2,7 @@ require "test_helper"
 
 class Account::BillingTest < ActiveSupport::TestCase
   test "active subscription" do
-    account = Account.create!(name: "Test")
+    account = accounts(:initech)
 
     # No subscription
     assert_nil account.active_subscription
@@ -14,5 +14,18 @@ class Account::BillingTest < ActiveSupport::TestCase
     # Active subscription exists
     account.subscription.update!(status: "active")
     assert_equal account.subscription, account.active_subscription
+  end
+
+  test "comped account" do
+    account = accounts(:"37s")
+
+    assert_not account.comped?
+
+    account.comp
+    assert account.comped?
+
+    # Calling comp again does not create duplicate
+    account.comp
+    assert_equal 1, Account::BillingWaiver.where(account: account).count
   end
 end

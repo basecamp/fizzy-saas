@@ -8,7 +8,7 @@ class Account::Subscription < SaasRecord
   delegate :paid?, to: :plan
 
   def plan
-    Plan.find(plan_key)
+    @plan ||= Plan.find(plan_key)
   end
 
   def to_be_canceled?
