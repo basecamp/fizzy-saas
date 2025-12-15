@@ -14,6 +14,7 @@ class Account::SubscriptionsController < ApplicationController
       cancel_url: account_subscription_url,
       metadata: { account_id: Current.account.id, plan_key: Plan.paid.key },
       automatic_tax: { enabled: true },
+      tax_id_collection: { enabled: true },
       billing_address_collection: "required",
       customer_update: { address: "auto" }
 
