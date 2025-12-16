@@ -1,4 +1,8 @@
 module SubscriptionsHelper
+  def plan_storage_limit(plan)
+    number_to_human_size(plan.storage_limit).delete(" ")
+  end
+
   def subscription_period_end_action(subscription)
     if subscription.to_be_canceled?
       "Your Fizzy subscription ends on"

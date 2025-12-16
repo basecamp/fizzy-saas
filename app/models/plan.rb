@@ -47,8 +47,4 @@ class Plan
   def limit_cards?
     card_limit != Float::INFINITY
   end
-
-  def formatted_storage_limit
-    ActionController::Base.helpers.number_to_human_size(storage_limit).delete(" ")
-  end
 end
