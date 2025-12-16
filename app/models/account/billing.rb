@@ -10,14 +10,6 @@ module Account::Billing
     active_subscription&.plan || Plan.free
   end
 
-  def active_subscription
-    if comped?
-      comped_subscription
-    else
-      subscription if subscription&.active?
-    end
-  end
-
   def subscribed?
     subscription.present?
   end
@@ -36,6 +28,14 @@ module Account::Billing
   end
 
   private
+    def active_subscription
+      if comped?
+        comped_subscription
+      else
+        subscription if subscription&.active?
+      end
+    end
+
     def comped_subscription
       @comped_subscription ||= billing_waiver&.subscription
     end

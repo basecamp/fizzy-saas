@@ -1,19 +1,19 @@
 require "test_helper"
 
 class Account::BillingTest < ActiveSupport::TestCase
-  test "active subscription" do
+  test "plan reflects active subscription" do
     account = accounts(:initech)
 
     # No subscription
-    assert_nil account.active_subscription
+    assert_equal Plan.free, account.plan
 
     # Subscription but it is not active
     account.create_subscription!(plan_key: "monthly_v1", status: "canceled", stripe_customer_id: "cus_test")
-    assert_nil account.active_subscription
+    assert_equal Plan.free, account.plan
 
     # Active subscription exists
     account.subscription.update!(status: "active")
-    assert_equal account.subscription, account.active_subscription
+    assert_equal Plan.paid, account.plan
   end
 
   test "comped account" do
