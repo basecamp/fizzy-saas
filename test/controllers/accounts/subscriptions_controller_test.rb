@@ -37,6 +37,21 @@ class Account::SubscriptionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to "https://checkout.stripe.com/session123"
   end
 
+  test "create with plan_key uses specified plan" do
+    customer = OpenStruct.new(id: "cus_test_37signals")
+    session = OpenStruct.new(url: "https://checkout.stripe.com/session123")
+
+    Stripe::Customer.stubs(:retrieve).returns(customer)
+    Stripe::Checkout::Session.stubs(:create).with do |options|
+      options[:metadata][:plan_key] == :monthly_extra_storage_v1 &&
+        options[:line_items].first[:price] == Plan.paid_with_extra_storage.stripe_price_id
+    end.returns(session)
+
+    post account_subscription_path(plan_key: :monthly_extra_storage_v1)
+
+    assert_redirected_to "https://checkout.stripe.com/session123"
+  end
+
   test "create requires admin" do
     logout_and_sign_in_as :david
 

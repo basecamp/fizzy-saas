@@ -20,6 +20,10 @@ class Plan
       @paid ||= find(:monthly_v1)
     end
 
+    def paid_with_extra_storage
+      @paid_with_extra_storage ||= find(:monthly_extra_storage_v1)
+    end
+
     def find(key)
       @all_by_key ||= all.index_by(&:key).with_indifferent_access
       @all_by_key[key]
