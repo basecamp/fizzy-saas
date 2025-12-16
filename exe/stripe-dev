@@ -30,13 +30,15 @@ secrets_escaped = `kamal secrets fetch \
   --account basecamp \
   --from "Deploy/Fizzy" \
   "Development/STRIPE_SECRET_KEY" \
-  "Development/STRIPE_MONTHLY_V1_PRICE_ID" 2>/dev/null`
+  "Development/STRIPE_MONTHLY_V1_PRICE_ID" \
+  "Development/STRIPE_MONTHLY_EXTRA_STORAGE_V1_PRICE_ID" 2>/dev/null`
 
 secrets_json = secrets_escaped.gsub(/\\(.)/, '\1')
 secrets = JSON.parse(secrets_json)
 
 stripe_secret_key = secrets["Deploy/Fizzy/Development/STRIPE_SECRET_KEY"]
 stripe_price_id = secrets["Deploy/Fizzy/Development/STRIPE_MONTHLY_V1_PRICE_ID"]
+stripe_extra_storage_price_id = secrets["Deploy/Fizzy/Development/STRIPE_MONTHLY_EXTRA_STORAGE_V1_PRICE_ID"]
 
 # Clear previous log file
 File.write(LOG_FILE, "")
@@ -72,6 +74,7 @@ end
 # Output export statements
 puts %Q(export STRIPE_SECRET_KEY="#{stripe_secret_key}")
 puts %Q(export STRIPE_MONTHLY_V1_PRICE_ID="#{stripe_price_id}")
+puts %Q(export STRIPE_MONTHLY_EXTRA_STORAGE_V1_PRICE_ID="#{stripe_extra_storage_price_id}")
 puts %Q(export STRIPE_WEBHOOK_SECRET="#{webhook_secret}") if webhook_secret
 
 # Informational message to stderr (won't be eval'd)

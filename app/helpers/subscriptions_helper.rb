@@ -1,6 +1,6 @@
 module SubscriptionsHelper
-  def plan_storage_limit(plan)
-    number_to_human_size(plan.storage_limit).delete(" ")
+  def storage_to_human_size(bytes)
+    number_to_human_size(bytes).delete(" ")
   end
 
   def subscription_period_end_action(subscription)

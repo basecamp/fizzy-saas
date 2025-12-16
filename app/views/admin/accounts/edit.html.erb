@@ -11,14 +11,21 @@
         <dt class="font-weight-bold">Actual card count:</dt>
         <dd class="margin-inline-start-none"><%= @account.cards_count %></dd>
       </div>
+      <div class="flex gap-half">
+        <dt class="font-weight-bold">Actual bytes used:</dt>
+        <dd class="margin-inline-start-none"><%= storage_to_human_size(@account.bytes_used) %></dd>
+      </div>
     </dl>
 
     <%= form_with model: @account, url: saas.admin_account_path(@account.external_account_id), class: "flex flex-column gap" do |form| %>
-      <div class="flex flex-column gap-half">
-        <%= form.label :overridden_card_count, "Override card count", class: "font-weight-bold" %>
-        <div class="flex align-center gap input input--actor">
-          <%= form.number_field :overridden_card_count, value: @account.overridden_limits&.card_count, class: "input full-width" %>
-        </div>
+      <div class="flex align-center gap-half">
+        <%= form.label :card_count, "Override card count", class: "font-weight-bold" %>
+        <%= form.number_field :card_count, value: @account.overridden_limits&.card_count, class: "input" %>
+      </div>
+
+      <div class="flex align-center gap-half">
+        <%= form.label :bytes_used, "Override bytes used", class: "font-weight-bold" %>
+        <%= form.number_field :bytes_used, value: @account.overridden_limits&.bytes_used, class: "input" %>
       </div>
 
       <button type="submit" class="btn btn--reversed">Save</button>

@@ -1,0 +1,4 @@
+<strong>You've used your <u><%= storage_to_human_size(Plan.free.storage_limit) %></u> free storage.</strong>
+<%= link_to account_settings_path(anchor: "subscription"), class: "btn settings-subscription__button" do %>
+  <span>Upgrade for more storage</span>
+<% end %>

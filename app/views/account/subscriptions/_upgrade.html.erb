@@ -1,12 +1,9 @@
 <div class="settings-subscription__notch card-perma__notch card-perma__notch--bottom">
   <% if Current.user.admin? %>
-    <strong>You’ve used your <u><%= Plan.free.card_limit %></u> free cards.</strong>
-    <%= link_to account_settings_path(anchor: "subscription"), class: "btn settings-subscription__button" do %>
-      <span>Upgrade to Unlimited</span>
-    <% end %>
+    <%= render "account/subscriptions/notices/admin_exceeding_card_limit" if Current.account.exceeding_card_limit? %>
+    <%= render "account/subscriptions/notices/admin_exceeding_storage_limit" if Current.account.exceeding_storage_limit? %>
   <% else %>
-    <div class="pad-inline pad-block-half">
-      <strong>This account has used <u><%= Plan.free.card_limit %></u> free cards. Upgrade to get more.</strong>
-    </div>
+    <%= render "account/subscriptions/notices/user_exceeding_card_limit" if Current.account.exceeding_card_limit? %>
+    <%= render "account/subscriptions/notices/user_exceeding_storage_limit" if Current.account.exceeding_storage_limit? %>
   <% end %>
 </div>

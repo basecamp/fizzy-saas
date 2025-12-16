@@ -32,7 +32,31 @@ class Account::LimitedTest < ActiveSupport::TestCase
     assert accounts(:initech).exceeding_card_limit?
   end
 
-  test "override limits" do
+  test "detect nearing storage limit" do
+    account = accounts(:initech)
+
+    # Not near limit (more than 500MB remaining of 1GB)
+    account.override_limits bytes_used: 524.megabytes
+    assert_not account.nearing_plan_storage_limit?
+
+    # Near limit (less than 500MB remaining of 1GB)
+    account.override_limits bytes_used: 525.megabytes
+    assert account.nearing_plan_storage_limit?
+  end
+
+  test "detect exceeding storage limit" do
+    account = accounts(:initech)
+
+    # Under limit
+    account.override_limits bytes_used: 1.gigabyte - 1
+    assert_not account.exceeding_storage_limit?
+
+    # Over limit
+    account.override_limits bytes_used: 1.gigabyte + 1
+    assert account.exceeding_storage_limit?
+  end
+
+  test "override cards count" do
     account = accounts(:initech)
     account.update_column(:cards_count, 1001)
 
@@ -47,6 +71,20 @@ class Account::LimitedTest < ActiveSupport::TestCase
     account.reset_overridden_limits
     assert account.exceeding_card_limit?
     assert_equal 1001, account.billed_cards_count
+  end
+
+  test "override bytes used" do
+    account = accounts(:initech)
+    actual_bytes = account.bytes_used
+
+    assert_equal actual_bytes, account.billed_bytes_used
+
+    account.override_limits bytes_used: 10_000
+    assert_equal 10_000, account.billed_bytes_used
+    assert_equal actual_bytes, account.bytes_used # original unchanged
+
+    account.reset_overridden_limits
+    assert_equal actual_bytes, account.billed_bytes_used
   end
 
   test "comped accounts are never limited" do

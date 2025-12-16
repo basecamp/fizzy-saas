@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.2].define(version: 2025_12_15_170000) do
+ActiveRecord::Schema[8.2].define(version: 2025_12_16_000000) do
   create_table "account_billing_waivers", id: :uuid, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.uuid "account_id", null: false
     t.datetime "created_at", null: false
@@ -20,6 +20,7 @@ ActiveRecord::Schema[8.2].define(version: 2025_12_15_170000) do
 
   create_table "account_overridden_limits", id: :uuid, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.uuid "account_id", null: false
+    t.bigint "bytes_used"
     t.integer "card_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
