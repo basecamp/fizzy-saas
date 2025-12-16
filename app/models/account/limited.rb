@@ -16,7 +16,7 @@ module Account::Limited
   end
 
   def nearing_plan_cards_limit?
-    plan.limit_cards? && (plan.card_limit - billed_cards_count) < NEAR_CARD_LIMIT_THRESHOLD
+    plan.limit_cards? && remaining_cards_count < NEAR_CARD_LIMIT_THRESHOLD
   end
 
   def exceeding_card_limit?
@@ -27,4 +27,9 @@ module Account::Limited
     overridden_limits&.destroy
     reload_overridden_limits
   end
+
+  private
+    def remaining_cards_count
+      plan.card_limit - billed_cards_count
+    end
 end
