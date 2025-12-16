@@ -4,12 +4,12 @@ class Stripe::WebhooksController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def create
-    event = verify_webhook_signature
-    return head :bad_request unless event
-
-    dispatch_stripe_event(event)
-
-    head :ok
+    if event = verify_webhook_signature
+      dispatch_stripe_event(event)
+      head :ok
+    else
+      head :bad_request
+    end
   end
 
   private
