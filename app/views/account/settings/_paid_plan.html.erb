@@ -2,5 +2,5 @@
 
 <% if Current.account.subscription %>
   <%= render "account/settings/subscription", subscription: Current.account.subscription %>
-  <p class="settings-subscription__footer txt-small">Right now you're on the <strong><%= Current.account.plan.name %></strong> plan which includes unlimited cards, unlimited users, and <%= plan_storage_limit(Plan.paid) %> of storage.</p>
+  <p class="settings-subscription__footer txt-small">Right now you're on the <strong><%= Current.account.plan.name %></strong> plan which includes unlimited cards, unlimited users, and <%= storage_to_human_size(Plan.paid.storage_limit) %> of storage.</p>
 <% end %>

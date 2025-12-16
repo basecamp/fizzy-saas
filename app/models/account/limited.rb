@@ -36,6 +36,14 @@ module Account::Limited
     billed_bytes_used > plan.storage_limit
   end
 
+  def exceeding_limits?
+    exceeding_card_limit? || exceeding_storage_limit?
+  end
+
+  def nearing_limits?
+    nearing_plan_cards_limit? || nearing_plan_storage_limit?
+  end
+
   def reset_overridden_limits
     overridden_limits&.destroy
     reload_overridden_limits

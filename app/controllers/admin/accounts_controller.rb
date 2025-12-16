@@ -12,7 +12,7 @@ class Admin::AccountsController < AdminController
   end
 
   def update
-    @account.override_limits(card_count: overridden_card_count_param)
+    @account.override_limits(**overridden_limits_params.to_h.symbolize_keys)
     redirect_to saas.edit_admin_account_path(@account.external_account_id), notice: "Account limits updated"
   end
 
@@ -21,7 +21,7 @@ class Admin::AccountsController < AdminController
       @account = Account.find_by!(external_account_id: params[:id])
     end
 
-    def overridden_card_count_param
-      params[:account][:overridden_card_count].to_i
+    def overridden_limits_params
+      params.expect(account: [ :card_count, :bytes_used ])
     end
 end
